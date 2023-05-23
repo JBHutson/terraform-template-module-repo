@@ -1,0 +1,17 @@
+{
+    "template": "#{{CHANGELOG}}\n",
+    "categories": [
+        {
+            "title": "## Feature",
+            "labels": ["feature"]
+        },
+        {
+            "title": "## Fix",
+            "labels": ["fix"]
+        },
+        {
+            "title": "## Chore",
+            "labels": ["chore"]
+        }
+    ]
+}

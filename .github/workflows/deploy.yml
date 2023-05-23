@@ -1,0 +1,34 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  bump-version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Bump version and push tag
+        uses: mathieudutour/github-tag-action@6.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+  release:
+    needs: bump-version
+    runs-on: ubuntu-latest
+      name: Create Release Changelog
+      id: changelog
+      uses: mikepenz/release-changelog-builder-action@v3.7.1
+      with:
+        configuration: ".github/release_notes_config.json"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+      name: Create GitHub release
+      uses: ncipollo/release-action@v1
+      with:
+        tag: ${{ needs.bump-version.outputs.new_tag }}
+        name: ${{ needs.bump-version.outputs.new_tag }}
+        body: ${{ steps.changelog.outputs.changelog }}
