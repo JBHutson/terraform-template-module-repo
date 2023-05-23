@@ -13,7 +13,7 @@ jobs:
       - name: Bump version and push tag
         uses: mathieudutour/github-tag-action@6.1
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.TOKEN }}
 
   release:
     needs: bump-version
@@ -24,7 +24,7 @@ jobs:
       with:
         configuration: ".github/release_notes_config.json"
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.TOKEN }}
     
       name: Create GitHub release
       uses: ncipollo/release-action@v1
