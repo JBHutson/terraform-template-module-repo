@@ -13,22 +13,23 @@ jobs:
       - name: Bump version and push tag
         uses: mathieudutour/github-tag-action@6.1
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.TOKEN }}
 
   release:
     needs: bump-version
     runs-on: ubuntu-latest
-      name: Create Release Changelog
-      id: changelog
-      uses: mikepenz/release-changelog-builder-action@v3.7.1
-      with:
-        configuration: ".github/release_notes_config.json"
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Create Release Changelog
+        id: changelog
+        uses: mikepenz/release-changelog-builder-action@v3.7.1
+        with:
+          configuration: ".github/release_notes_config.json"
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
     
-      name: Create GitHub release
-      uses: ncipollo/release-action@v1
-      with:
-        tag: ${{ needs.bump-version.outputs.new_tag }}
-        name: ${{ needs.bump-version.outputs.new_tag }}
-        body: ${{ steps.changelog.outputs.changelog }}
+      - name: Create GitHub release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ needs.bump-version.outputs.new_tag }}
+          name: ${{ needs.bump-version.outputs.new_tag }}
+          body: ${{ steps.changelog.outputs.changelog }}
