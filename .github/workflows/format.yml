@@ -1,0 +1,49 @@
+name: Format Checks
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  terraform-format:
+    name: Terraform Format Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.4.2
+
+      - name: Run Terraform Format Check
+        run: terraform fmt -check -recursive
+
+  python-format:
+    name: Python Format Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python 3.x
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      
+      - name: Run Python Format Check
+        run: pip3 install pylint && pylint external
+
+  golang-format:
+    name: Golang Format Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Golang
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.20.2
+
+      - name: Run Golang Format Check
+        working-directory: test/
+        run: find . -name '*.go' -exec gofmt -d {} \;
