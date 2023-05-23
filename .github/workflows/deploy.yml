@@ -18,17 +18,18 @@ jobs:
   release:
     needs: bump-version
     runs-on: ubuntu-latest
-      name: Create Release Changelog
-      id: changelog
-      uses: mikepenz/release-changelog-builder-action@v3.7.1
-      with:
-        configuration: ".github/release_notes_config.json"
-      env:
-        GITHUB_TOKEN: ${{ secrets.TOKEN }}
+    steps:
+      - name: Create Release Changelog
+        id: changelog
+        uses: mikepenz/release-changelog-builder-action@v3.7.1
+        with:
+          configuration: ".github/release_notes_config.json"
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
     
-      name: Create GitHub release
-      uses: ncipollo/release-action@v1
-      with:
-        tag: ${{ needs.bump-version.outputs.new_tag }}
-        name: ${{ needs.bump-version.outputs.new_tag }}
-        body: ${{ steps.changelog.outputs.changelog }}
+      - name: Create GitHub release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ needs.bump-version.outputs.new_tag }}
+          name: ${{ needs.bump-version.outputs.new_tag }}
+          body: ${{ steps.changelog.outputs.changelog }}
